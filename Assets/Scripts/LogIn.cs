@@ -24,6 +24,8 @@ public class LogIn : UiTransation
     {
         Usernane = User.text.ToString();
         PassWard = pass.text.ToString();
+        CurrntUI.SetActive(false);
+        TargetUI.SetActive(true);
         Debug.Log(Usernane);
         Debug.Log(PassWard);
     }
