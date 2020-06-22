@@ -5,30 +5,32 @@ using UnityEngine.Networking;
 
 public class Web : MonoBehaviour
 {
-    // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(GetText());
+        // A correct website page.
+        StartCoroutine(GetRequest("http://ec2-3-17-135-24.us-east-2.compute.amazonaws.com/api/auth/club"));
+
+     
     }
 
-    IEnumerator GetText()
+    IEnumerator GetRequest(string uri)
     {
-
-        using (UnityWebRequest www = UnityWebRequest.Get("http://localhost/Pockerm8%20Backend/Date.php"))
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
         {
-            yield return www.Send();
-            if (www.isNetworkError || www.isHttpError)
+            // Request and wait for the desired page.
+            yield return webRequest.SendWebRequest();
+
+            string[] pages = uri.Split('/');
+            int page = pages.Length - 1;
+
+            if (webRequest.isNetworkError)
             {
-                Debug.Log(www.error);
-
+                Debug.Log(pages[page] + ": Error: " + webRequest.error);
             }
-            else {
-                Debug.Log(www.downloadHandler.text);
-
-                byte[] results = www.downloadHandler.data;
-            
+            else
+            {
+                Debug.Log(pages[page] + ":\nReceived: " + webRequest.downloadHandler.text);
             }
         }
-
     }
 }
